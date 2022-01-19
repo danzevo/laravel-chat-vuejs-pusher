@@ -22,7 +22,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('chat', [ChatController::class, 'chat']);
-    Route::get('send', [ChatController::class, 'send']);
+    Route::post('send', [ChatController::class, 'send']);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
