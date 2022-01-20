@@ -62,7 +62,8 @@ const app = new Vue({
                 this.chat.time.push(this.getTime());
 
                 axios.post('/send', {
-                    message: this.message
+                    message: this.message,
+                    chat: this.chat,
                   })
                   .then(response => {
                     this.message = '';
@@ -79,6 +80,25 @@ const app = new Vue({
             let currentMinutes = time.getMinutes();
             currentMinutes = ("0" + currentMinutes).slice(-2);
             return currentHours+':'+currentMinutes;
+        },
+        getOldMessage() {
+            axios.post('/getOldMessage')
+                .then(response => {
+                    console.log(response);
+                    
+                    if(response.data != '') {
+                        this.chat = response.data;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        deleteSession() {
+            axios.post('/deleteSession')
+                .then(response => {
+                    this.$toaster.success('Chat history is deleted')
+                });
         }
     },
     watch: {
@@ -90,6 +110,7 @@ const app = new Vue({
         }
     },
     mounted() {
+        this.getOldMessage();
         Echo.private(`chat`)
             .listen('ChatEvent', (e) => {
                 // console.log(e);
@@ -97,6 +118,16 @@ const app = new Vue({
                 this.chat.user.push(e.user);
                 this.chat.color.push('warning');
                 this.chat.time.push(this.getTime());
+
+                axios.post('/saveToSession', {
+                    chat: this.chat,
+                  })
+                  .then(response => {
+                    console.log(response);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
             })
             .listenForWhisper('typing', (e) => {
                 if(e.name != '') {

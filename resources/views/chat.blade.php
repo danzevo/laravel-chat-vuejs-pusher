@@ -19,7 +19,9 @@
     <div class="container" id="app">
         <div class="row">
             <div class="offset-md-4 col-4">
-                <li class="list-group-item active">Chat Room <span class="badge badge-pill badge-danger">@{{ numberOfUsers }}</span></li>
+                <li class="list-group-item active">Chat Room 
+                    <span class="badge badge-pill badge-danger">@{{ numberOfUsers }}</span>
+                </li>
                 <div class="badge badge-pill badge-primary">@{{ typing }}</div>
                 <ul class="list-group" v-chat-scroll>
                     <message
@@ -31,6 +33,8 @@
                     >@{{ value }}</message>
                 </ul>
                 <input type="text" v-model="message" @keyup.enter='send' class="form-control" placeholder="Type your message here..">
+                <br>
+                <a href='' class="btn btn-warning btn-sm" @click.prevent='deleteSession'>Delete</a>
             </div>
         </div>
     </div>
